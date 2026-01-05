@@ -6,3 +6,32 @@
 --
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
+
+-- Auto-open file explorer (neo-tree) on startup
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    vim.defer_fn(function()
+      pcall(vim.cmd, "Neotree show")
+    end, 100)
+  end,
+})
+
+
+-- Show diagnostics (short inline, use gl for full error)
+vim.diagnostic.config({
+  virtual_text = { spacing = 4, prefix = "●" },
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  float = { border = "rounded" },
+})
+
+-- Enable inlay hints when LSP attaches
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client.server_capabilities.inlayHintProvider then
+      vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+    end
+  end,
+})
