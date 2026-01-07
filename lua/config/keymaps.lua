@@ -61,6 +61,13 @@ vim.keymap.set('n', '<leader>qf', function()
   })
 end, { desc = "Quick fix" })
 
+-- LSP Rename
+vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = "Rename symbol" })
+vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename, { desc = "Rename symbol" })
+
+-- Double-click to find all references (like most IDEs)
+vim.keymap.set('n', '<2-LeftMouse>', vim.lsp.buf.references, { desc = "Find references" })
+
 -- Telescope
 vim.keymap.set('n', '<leader>fg', ':Telescope live_grep<CR>', { desc = "Live grep" })
 vim.keymap.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = "Find files" })
