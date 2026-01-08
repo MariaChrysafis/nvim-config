@@ -15,25 +15,6 @@ return {
           },
         },
       }
-
-      local cwd = vim.fn.getcwd()
-      if cwd:match("Exafunction") then
-        opts.servers.gopls = {
-          settings = {
-            gopls = {
-              env = {
-                GOPACKAGESDRIVER = "/Users/mariachrysafis/Documents/Exafunction/tools/gopackagesdriver.sh",
-              },
-              directoryFilters = {
-                "-bazel-bin",
-                "-bazel-out",
-                "-bazel-testlogs",
-                "-bazel-Exafunction",
-              },
-            },
-          },
-        }
-      end
     end,
   },
 }
