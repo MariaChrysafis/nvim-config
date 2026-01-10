@@ -71,3 +71,29 @@ vim.keymap.set('n', '<2-LeftMouse>', vim.lsp.buf.references, { desc = "Find refe
 -- Telescope
 vim.keymap.set('n', '<leader>fg', ':Telescope live_grep<CR>', { desc = "Live grep" })
 vim.keymap.set('n', '<leader>ff', ':Telescope find_files<CR>', { desc = "Find files" })
+
+-- Grep in Neo-tree directory
+vim.keymap.set('n', '<leader>sn', function()
+  local ok, manager = pcall(require, 'neo-tree.sources.manager')
+  if ok then
+    local state = manager.get_state('filesystem')
+    local tree = state and state.tree
+    local node = tree and tree:get_node()
+    if node then
+      local path = node:get_id()
+      if node.type == 'file' then
+        path = vim.fn.fnamemodify(path, ':h')
+      end
+      vim.notify('Grepping in: ' .. path)
+      require('telescope.builtin').live_grep({ cwd = path })
+      return
+    end
+  end
+  require('telescope.builtin').live_grep()
+end, { desc = 'Grep in Neo-tree directory' })
+
+-- Toggle terminal at bottom
+vim.keymap.set('n', '<C-`>', function()
+  vim.cmd('botright 15split | terminal')
+end, { desc = 'Open terminal at bottom' })
+vim.keymap.set('t', '<C-`>', '<C-\\><C-n>:q<CR>', { desc = 'Close terminal' })
