@@ -102,3 +102,30 @@ vim.keymap.set('t', '<C-`>', '<C-\\><C-n>:q<CR>', { desc = 'Close terminal' })
 vim.keymap.set('n', '<leader>tc', function()
   vim.cmd('vsplit | terminal chisel')
 end, { desc = 'Terminal with chisel' })
+
+-- Git add, commit, push workflow
+vim.keymap.set('n', '<leader>gp', function()
+  vim.ui.input({ prompt = 'Commit message: ' }, function(msg)
+    if not msg or msg == '' then
+      vim.notify('Commit cancelled', vim.log.levels.WARN)
+      return
+    end
+    -- Escape quotes in commit message
+    msg = msg:gsub('"', '\\"')
+    local cmd = string.format('git add . && git commit -m "%s" --no-verify && git push || git push -u origin HEAD', msg)
+    vim.fn.jobstart(cmd, {
+      on_exit = function(_, code)
+        if code == 0 then
+          vim.notify('Committed and pushed!', vim.log.levels.INFO)
+        else
+          vim.notify('Git operation failed', vim.log.levels.ERROR)
+        end
+      end,
+      on_stderr = function(_, data)
+        if data and data[1] ~= '' then
+          vim.notify(table.concat(data, '\n'), vim.log.levels.WARN)
+        end
+      end,
+    })
+  end)
+end, { desc = 'Git add, commit, push' })
