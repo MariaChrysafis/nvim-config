@@ -12,6 +12,8 @@ vim.diagnostic.config({
 vim.g.neovide_cursor_vfx_mode = "railgun"
 vim.g.neovide_cursor_animate_in_insert_mode = true
 vim.g.neovide_cursor_animation_length = 0.1
+vim.g.neovide_opacity = 0.9
+vim.g.neovide_normal_opacity = 0.9
 
 -- Neovide scaling keymaps
 if vim.g.neovide == true then
