@@ -18,6 +18,13 @@ if vim.g.neovide == true then
   vim.api.nvim_set_keymap("n", "<C-+>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>", { silent = true })
   vim.api.nvim_set_keymap("n", "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>", { silent = true })
   vim.api.nvim_set_keymap("n", "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>", { silent = true })
+
+  -- Cmd+C and Cmd+V for copy/paste (all modes)
+  vim.keymap.set('v', '<D-c>', '"+y')         -- Copy in visual mode
+  vim.keymap.set('n', '<D-v>', '"+P')         -- Paste in normal mode
+  vim.keymap.set('v', '<D-v>', '"+P')         -- Paste in visual mode
+  vim.keymap.set('c', '<D-v>', '<C-R>+')      -- Paste in command mode
+  vim.keymap.set('i', '<D-v>', '<C-R>+')      -- Paste in insert mode
 end
 
 -- Fixed socket for neovim-remote (nvr) integration
