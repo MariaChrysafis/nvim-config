@@ -97,3 +97,8 @@ vim.keymap.set('n', '<C-`>', function()
   vim.cmd('botright 15split | terminal')
 end, { desc = 'Open terminal at bottom' })
 vim.keymap.set('t', '<C-`>', '<C-\\><C-n>:q<CR>', { desc = 'Close terminal' })
+
+-- Open terminal to the right with chisel
+vim.keymap.set('n', '<leader>tc', function()
+  vim.cmd('vsplit | terminal chisel')
+end, { desc = 'Terminal with chisel' })
