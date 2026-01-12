@@ -9,9 +9,12 @@ vim.diagnostic.config({
 })
 
 -- Neovide settings
-vim.g.neovide_opacity = 0.85
-vim.g.neovide_normal_opacity = 0.6  -- Blend colorscheme bg with desktop (lower = more transparent)
+vim.g.neovide_opacity = 0.8
+vim.g.neovide_normal_opacity = 0.5  -- Blend colorscheme bg with desktop (lower = more transparent)
 vim.g.neovide_window_blurred = true  -- Blur the background (macOS only)
+vim.g.neovide_remember_window_size = false  -- Don't remember previous window size/state
+vim.g.neovide_fullscreen = false  -- Don't auto-fullscreen on startup
+vim.g.neovide_macos_simple_fullscreen = true  -- When fullscreen, use simple mode (keeps transparency)
 
 -- Cursor animations
 vim.g.neovide_cursor_vfx_mode = "pixiedust"  -- Options: railgun, torpedo, pixiedust, sonicboom, ripple, wireframe

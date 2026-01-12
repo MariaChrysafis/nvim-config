@@ -15,6 +15,8 @@ return {
           },
         },
       }
+
+      opts.servers.kotlin_language_server = {}
     end,
   },
 }

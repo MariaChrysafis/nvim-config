@@ -103,6 +103,58 @@ vim.keymap.set('n', '<leader>tc', function()
   vim.cmd('vsplit | terminal chisel')
 end, { desc = 'Terminal with chisel' })
 
+-- Format with leader+fs (runs format.sh from exafunction/windsurf)
+vim.keymap.set('n', '<leader>fs', function()
+  local fidget_ok, fidget_progress = pcall(require, "fidget.progress")
+  local handle = nil
+  if fidget_ok then
+    handle = fidget_progress.handle.create({
+      title = "format.sh",
+      message = "Starting...",
+      lsp_client = { name = "format" },
+      percentage = 0,
+    })
+  else
+    vim.notify("Formatting...", vim.log.levels.INFO, { title = "format.sh" })
+  end
+
+  vim.fn.jobstart("source ~/.nvm/nvm.sh && cd /Users/mariachrysafis/Documents/exafunction/windsurf && nvm use && ./scripts/format.sh 2>&1", {
+    shell = "/bin/zsh",
+    stdout_buffered = false,
+    on_stdout = function(_, data)
+      if data then
+        for _, line in ipairs(data) do
+          if line ~= "" then
+            vim.schedule(function()
+              if handle then
+                handle:report({ message = line })
+              end
+            end)
+          end
+        end
+      end
+    end,
+    on_exit = function(_, code)
+      vim.schedule(function()
+        if handle then
+          if code == 0 then
+            handle:finish()
+          else
+            handle:report({ message = "Failed (exit " .. code .. ")" })
+            handle:finish()
+          end
+        else
+          if code == 0 then
+            vim.notify("Format complete!", vim.log.levels.INFO, { title = "format.sh" })
+          else
+            vim.notify("Format failed (exit " .. code .. ")", vim.log.levels.ERROR, { title = "format.sh" })
+          end
+        end
+      end)
+    end,
+  })
+end, { desc = 'Format (exafunction/windsurf)' })
+
 -- Git add, commit, push workflow
 vim.keymap.set('n', '<leader>gp', function()
   vim.ui.input({ prompt = 'Commit message: ' }, function(msg)
