@@ -13,6 +13,12 @@ vim.opt.clipboard = "unnamed"
 vim.opt.wrap = true
 vim.opt.linebreak = true  -- Wrap at word boundaries, not mid-word
 
+-- Indentation
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
+vim.opt.expandtab = true
+
 -- Enable inlay hints (type annotations)
 vim.g.lazyvim_rust_diagnostics = "rust-analyzer"
 

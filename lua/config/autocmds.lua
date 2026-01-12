@@ -7,14 +7,6 @@
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
 
--- Auto-open file explorer (neo-tree) on startup
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    vim.defer_fn(function()
-      pcall(vim.cmd, "Neotree show")
-    end, 100)
-  end,
-})
 
 
 -- Show diagnostics (short inline, use gl for full error)
@@ -32,6 +24,22 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     if client and client.server_capabilities.inlayHintProvider then
       vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+    end
+  end,
+})
+
+-- Open neo-tree when first file is opened (after dashboard)
+local neotree_opened = false
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  callback = function()
+    if neotree_opened then return end
+    local ft = vim.bo.filetype
+    if ft ~= "" and ft ~= "snacks_dashboard" and ft ~= "neo-tree" and ft ~= "lazy" then
+      neotree_opened = true
+      vim.defer_fn(function()
+        vim.cmd("Neotree show")
+        vim.cmd("wincmd l")
+      end, 50)
     end
   end,
 })
